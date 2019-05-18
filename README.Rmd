@@ -27,11 +27,11 @@ List contents of data directory
 dir_ls("data")
 ```
 
-Read first 2 lines of file, noticing header with incorrect separators
+Read first lines of file, noticing header with incorrect separators
 
 ```{r}
 fname1 <- "data/wrong_header.csv"
-read_lines(fname1,n_max=2)
+read_lines(fname1,n_max=3)
 ```
 
 Let us fix the separators in the header

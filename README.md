@@ -15,12 +15,13 @@ dir_ls("data")
 #> data/wrong_header.csv
 ```
 
-Read first 2 lines of file, noticing header with incorrect separators
+Read first lines of file, noticing header with incorrect separators
 
 ``` r
 fname1 <- "data/wrong_header.csv"
-read_lines(fname1,n_max=2)
+read_lines(fname1,n_max=3)
 #> [1] "name|birthdate|height|kgs"  "danno;2001-05-22;1,73;75,4"
+#> [3] "manno;2002-06-23;1,83;85,4"
 ```
 
 Let us fix the separators in the header
