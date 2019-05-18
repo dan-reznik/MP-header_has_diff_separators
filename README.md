@@ -41,7 +41,6 @@ and pipe result to read\_csv2
 df_sensei1 <- c(fixed_header,read_lines(fname1,skip=1)) %>%
   str_c(collapse="\n") %>%
   read_csv2
-#> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
 ```
 
 | name   | birthdate  | height |  kgs |
@@ -58,7 +57,6 @@ Just make sure file does not contain any other “|”
 df_sensei2 <- read_file(fname1) %>%
   str_replace_all(fixed("|"),";") %>%
   read_csv2
-#> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
 ```
 
 | name   | birthdate  | height |  kgs |
@@ -77,14 +75,15 @@ read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))
 #> [1] "danno;2001-05-22;1,73;75,4\nmanno;2002-06-23;1,83;85,4\nweirdo;2003-07-24;1,93;91,3\n"
 ```
 
-So we can simply combine fixed header and remainder of the file as such:
+So we can simply combine fixed header and remainder of the file:
 
 ``` r
-df_sensei3 <- str_c(c(fixed_header,
-                    read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))),
+skip_chars <- function(s,skip) str_sub(s,start=skip)
+
+skip <- 2+str_length(fixed_header)
+df_sensei3 <- str_c(c(fixed_header,skip_chars(read_file(fname1),skip)),
                     collapse="\n") %>%
   read_csv2
-#> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
 ```
 
 | name   | birthdate  | height |  kgs |

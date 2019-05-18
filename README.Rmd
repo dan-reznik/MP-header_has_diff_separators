@@ -46,7 +46,7 @@ fixed_header
 
 Concatenate fixed header with body of file (without the original header) and pipe result to read_csv2
 
-```{r}
+```{r,message=F}
 df_sensei1 <- c(fixed_header,read_lines(fname1,skip=1)) %>%
   str_c(collapse="\n") %>%
   read_csv2
@@ -61,7 +61,7 @@ df_sensei1 %>%
 
 Just make sure file does not contain any other "|" 
 
-```{r}
+```{r,message=F}
 df_sensei2 <- read_file(fname1) %>%
   str_replace_all(fixed("|"),";") %>%
   read_csv2
@@ -80,11 +80,13 @@ If we skip the body of the file by the length of the fixed_header + 2 we get the
 read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))
 ```
 
-So we can simply combine fixed header and remainder of the file as such:
+So we can simply combine fixed header and remainder of the file:
    
-```{r}                           
-df_sensei3 <- str_c(c(fixed_header,
-                    read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))),
+```{r,message=F}
+skip_chars <- function(s,skip) str_sub(s,start=skip)
+
+skip <- 2+str_length(fixed_header)
+df_sensei3 <- str_c(c(fixed_header,skip_chars(read_file(fname1),skip)),
                     collapse="\n") %>%
   read_csv2
 ```
