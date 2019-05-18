@@ -1,0 +1,64 @@
+---
+title: "Read a csv whose first line has different separators"
+output: github_document
+---
+
+```{r,echo=F}
+knitr::opts_chunk$set(
+  cache=T,
+  collapse=T,
+  comment="#>",
+  dpi=300,
+  fig.align="center",
+  out.width='100%'
+)
+```
+
+Load libraries
+
+```{r,message=F}
+library(tidyverse)
+library(fs)
+```
+
+List contents of data directory
+
+```{r}
+dir_ls("data")
+```
+
+Read first 2 lines of file, noticing header with incorrect separators
+
+```{r}
+fname1 <- "data/wrong_header.csv"
+read_lines(fname1,n_max=2)
+```
+
+Fix header
+```{r}
+fixed_header <- read_lines(fname1,n_max=1) %>%
+  str_replace_all(fixed("|"),";")
+fixed_header
+```
+
+Concatenate fixed header with body of file (without the original header) and pipe result to read_csv2
+
+```{r}
+df_sensei <- c(fixed_header,read_lines(fname1,skip=1)) %>%
+  str_c(collapse="\n") %>%
+  read_csv2
+```
+
+```{r,echo=F}
+df_sensei %>%
+  knitr::kable()
+```
+
+***
+
+Never give up. Every frustration is a necessary step in the path toward mastery.
+
+```{r,echo=F,fig.align="left",out.width="25%"}
+knitr::include_graphics("pics/ippon.gif")
+```
+
