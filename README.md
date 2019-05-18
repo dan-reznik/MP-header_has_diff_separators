@@ -51,9 +51,9 @@ df_sensei1 <- c(fixed_header,
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution2: replace separators on first line only
+# Solution 2: replace wrong separators on first line in entire file
 
-Just make sure file does not contain any other “|”
+warning: make sure file does not contain any other “|”
 
 ``` r
 df_sensei2 <- read_file(fname1) %>%
@@ -67,7 +67,7 @@ df_sensei2 <- read_file(fname1) %>%
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution3: combine fixed header with original file skipping chars
+# Solution 3: combine fixed header with original file skipping chars
 
 If we skip the body of the file by the length of the fixed\_header + 2
 we get the entire file after the first line:
