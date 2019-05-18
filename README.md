@@ -81,8 +81,9 @@ So we can simply combine fixed header and remainder of the file:
 skip_chars <- function(s,skip) str_sub(s,start=skip)
 
 skip <- 2+str_length(fixed_header)
-df_sensei3 <- str_c(c(fixed_header,skip_chars(read_file(fname1),skip)),
-                    collapse="\n") %>%
+df_sensei3 <- c(fixed_header,
+                skip_chars(read_file(fname1),skip)) %>%
+  str_c(collapse="\n") %>%
   read_csv2
 ```
 
