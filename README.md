@@ -118,15 +118,21 @@ Most efficient as skipping is done on disk using `seek()`. For
 black-belts only\! Note: may not work on Windows.
 
 ``` r
-con <- file(fname1,open="r")
-seek(con,where=skip,rw="read")
-size <- file.size(fname1)
+skip_n_read <- function(fname,skip) {
+  con <- file(fname1,open="r")
+  seek(con,where=skip,rw="read")
+  size <- file.size(fname1)
+  chars <- readChar(con,nchars=size)
+  close(con)
+  chars
+}
+
 df_sensei4 <- c(fixed_header,
-                readChar(con,nchars=size)) %>%
+                skip_n_read(fname1,skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
 #> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
-close(con)
+
 df_sensei4
 ```
 
