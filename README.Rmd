@@ -46,11 +46,12 @@ fixed_header
 
 Concatenate fixed header with body of file (without the original header) and pipe result to read_csv2
 
-```{r,message=F}
+```{r,message=F,results=F}
 df_sensei1 <- c(fixed_header,
                 read_lines(fname1,skip=1)) %>%
   str_c(collapse="\n") %>%
   read_csv2
+df_sensei1
 ```
 
 ```{r,echo=F}
@@ -62,10 +63,11 @@ df_sensei1 %>%
 
 warning: make sure file does not contain any other "|" 
 
-```{r,message=F}
+```{r,message=F,results=F}
 df_sensei2 <- read_file(fname1) %>%
   str_replace_all(fixed("|"),";") %>%
   read_csv2
+df_sensei2
 ```
 
 ```{r,echo=F}
@@ -87,11 +89,12 @@ read_file(fname1) %>% skip_chars(skip)
 
 Combine fixed header and remainder of the file:
    
-```{r,message=F}
+```{r,message=F,results=F}
 df_sensei3 <- c(fixed_header,
                 skip_chars(read_file(fname1),skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
+df_sensei3
 ```
 
 ```{r,echo=F}
@@ -103,7 +106,7 @@ df_sensei3 %>%
 
 Most efficient as skipping is done on disk using `seek()`. For black-belts only! Note: may not work on Windows.
 
-```{r}
+```{r,messages=F,results=F}
 con <- file(fname1,open="r")
 seek(con,where=skip,rw="read")
 size <- file.size(fname1)
@@ -112,6 +115,7 @@ df_sensei4 <- c(fixed_header,
   str_c(collapse="\n") %>%
   read_csv2
 close(con)
+df_sensei4
 ```
 ```{r,echo=F}
 df_sensei4 %>%

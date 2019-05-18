@@ -43,6 +43,7 @@ df_sensei1 <- c(fixed_header,
                 read_lines(fname1,skip=1)) %>%
   str_c(collapse="\n") %>%
   read_csv2
+df_sensei1
 ```
 
 | name   | birthdate  | height |  kgs |
@@ -59,6 +60,7 @@ warning: make sure file does not contain any other “|”
 df_sensei2 <- read_file(fname1) %>%
   str_replace_all(fixed("|"),";") %>%
   read_csv2
+df_sensei2
 ```
 
 | name   | birthdate  | height |  kgs |
@@ -88,6 +90,7 @@ df_sensei3 <- c(fixed_header,
                 skip_chars(read_file(fname1),skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
+df_sensei3
 ```
 
 | name   | birthdate  | height |  kgs |
@@ -104,7 +107,6 @@ black-belts only\! Note: may not work on Windows.
 ``` r
 con <- file(fname1,open="r")
 seek(con,where=skip,rw="read")
-#> [1] 0
 size <- file.size(fname1)
 df_sensei4 <- c(fixed_header,
                 readChar(con,nchars=size)) %>%
@@ -112,6 +114,7 @@ df_sensei4 <- c(fixed_header,
   read_csv2
 #> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
 close(con)
+df_sensei4
 ```
 
 | name   | birthdate  | height |  kgs |
