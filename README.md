@@ -131,8 +131,6 @@ df_sensei4 <- c(fixed_header,
                 skip_n_read(fname1,skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
-#> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
-
 df_sensei4
 ```
 

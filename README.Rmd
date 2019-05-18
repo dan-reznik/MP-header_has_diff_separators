@@ -117,7 +117,7 @@ df_sensei3 %>%
 
 Most efficient as skipping is done on disk using `seek()`. For black-belts only! Note: may not work on Windows.
 
-```{r,messages=F,results=F}
+```{r,message=F,results=F}
 skip_n_read <- function(fname,skip) {
   con <- file(fname1,open="r")
   seek(con,where=skip,rw="read")
@@ -131,7 +131,6 @@ df_sensei4 <- c(fixed_header,
                 skip_n_read(fname1,skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
-
 df_sensei4
 ```
 ```{r,echo=F}
