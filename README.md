@@ -39,7 +39,8 @@ Concatenate fixed header with body of file (without the original header)
 and pipe result to read\_csv2
 
 ``` r
-df_sensei1 <- c(fixed_header,read_lines(fname1,skip=1)) %>%
+df_sensei1 <- c(fixed_header,
+                read_lines(fname1,skip=1)) %>%
   str_c(collapse="\n") %>%
   read_csv2
 ```
