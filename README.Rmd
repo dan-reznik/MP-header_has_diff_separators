@@ -73,7 +73,7 @@ df_sensei2 %>%
   knitr::kable()
 ```
 
-# Solution 3: combine fixed header with original file skipping chars
+# Solution 3: combine fixed header with original file, skipping header chars
 
 If we skip the body of the file by the length of the fixed_header + 2 we get the entire file after the first line:
 

@@ -67,7 +67,7 @@ df_sensei2 <- read_file(fname1) %>%
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution 3: combine fixed header with original file skipping chars
+# Solution 3: combine fixed header with original file, skipping header chars
 
 If we skip the body of the file by the length of the fixed\_header + 2
 we get the entire file after the first line:
