@@ -69,24 +69,49 @@ df_sensei2 <- read_file(fname1) %>%
 
 # Solution 3: combine fixed header with original file, skipping header chars
 
-If we skip the body of the file by the length of the fixed\_header + 2
-we get the entire file after the first line:
+If we skip the body of the file by the length of the fixed\_header + 1
+(for the new line) we get the entire file after the first line:
 
 ``` r
-read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))
+skip_chars <- function(s,skip) str_sub(s,start=skip+1)
+skip <- 1+str_length(fixed_header)
+
+# just a test
+read_file(fname1) %>% skip_chars(skip)
 #> [1] "danno;2001-05-22;1,73;75,4\nmanno;2002-06-23;1,83;85,4\nweirdo;2003-07-24;1,93;91,3\n"
 ```
 
-So we can simply combine fixed header and remainder of the file:
+Combine fixed header and remainder of the file:
 
 ``` r
-skip_chars <- function(s,skip) str_sub(s,start=skip)
-
-skip <- 2+str_length(fixed_header)
 df_sensei3 <- c(fixed_header,
                 skip_chars(read_file(fname1),skip)) %>%
   str_c(collapse="\n") %>%
   read_csv2
+```
+
+| name   | birthdate  | height |  kgs |
+| :----- | :--------- | -----: | ---: |
+| danno  | 2001-05-22 |   1.73 | 75.4 |
+| manno  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo | 2003-07-24 |   1.93 | 91.3 |
+
+# Solution 4: low-level “seek” to skip+1
+
+Most efficient as skipping is done on disk using `seek()`. For
+black-belts only\! Note: may not work on Windows.
+
+``` r
+con <- file(fname1,open="r")
+seek(con,where=skip,rw="read")
+#> [1] 0
+size <- file.size(fname1)
+df_sensei4 <- c(fixed_header,
+                readChar(con,nchars=size)) %>%
+  str_c(collapse="\n") %>%
+  read_csv2
+#> Using ',' as decimal and '.' as grouping mark. Use read_delim() for more control.
+close(con)
 ```
 
 | name   | birthdate  | height |  kgs |

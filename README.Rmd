@@ -75,18 +75,19 @@ df_sensei2 %>%
 
 # Solution 3: combine fixed header with original file, skipping header chars
 
-If we skip the body of the file by the length of the fixed_header + 2 we get the entire file after the first line:
+If we skip the body of the file by the length of the fixed_header + 1 (for the new line) we get the entire file after the first line:
 
 ```{r}
-read_file(fname1) %>% str_sub(start=2+str_length(fixed_header))
+skip_chars <- function(s,skip) str_sub(s,start=skip+1)
+skip <- 1+str_length(fixed_header)
+
+# just a test
+read_file(fname1) %>% skip_chars(skip)
 ```
 
-So we can simply combine fixed header and remainder of the file:
+Combine fixed header and remainder of the file:
    
 ```{r,message=F}
-skip_chars <- function(s,skip) str_sub(s,start=skip)
-
-skip <- 2+str_length(fixed_header)
 df_sensei3 <- c(fixed_header,
                 skip_chars(read_file(fname1),skip)) %>%
   str_c(collapse="\n") %>%
@@ -98,6 +99,24 @@ df_sensei3 %>%
   knitr::kable()
 ```
 
+# Solution 4: low-level "seek" to skip+1
+
+Most efficient as skipping is done on disk using `seek()`. For black-belts only! Note: may not work on Windows.
+
+```{r}
+con <- file(fname1,open="r")
+seek(con,where=skip,rw="read")
+size <- file.size(fname1)
+df_sensei4 <- c(fixed_header,
+                readChar(con,nchars=size)) %>%
+  str_c(collapse="\n") %>%
+  read_csv2
+close(con)
+```
+```{r,echo=F}
+df_sensei4 %>%
+  knitr::kable()
+```
 
 ***
 
