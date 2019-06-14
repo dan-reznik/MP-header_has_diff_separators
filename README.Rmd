@@ -151,11 +151,15 @@ fnames
 
 Let's build a table showing in each line the name of the file, the first line, and the 2nd line:
 
-```{r}
-tibble(fname=fnames,
-       first_line=map_chr(fname,read_lines,n_max=1),
-       second_line=map_chr(fname,read_lines,skip=1,n_max=1)) %>%
-  knitr::kable()
+```{r,output=F}
+df_fnames <- tibble(fname=fnames,
+                    first_line=map_chr(fname,read_lines,n_max=1),
+                    second_line=map_chr(fname,read_lines,skip=1,n_max=1))
+```
+
+```{r,echo=F,out.width="100%"}
+df_fnames %>%
+  knitr::kable(format="html")
 ```
 
 As before let us fix the separators in the header for the first file in the series
