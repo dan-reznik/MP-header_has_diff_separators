@@ -158,9 +158,9 @@ Let’s build a table showing in each line the name of the file, the first
 line, and the 2nd line:
 
 ``` r
-df_fnames <- tibble(fname=fnames,
-                    first_line=map_chr(fname,read_lines,n_max=1),
-                    second_line=map_chr(fname,read_lines,skip=1,n_max=1))
+df_fnames <- tibble(fname=basename(fnames),
+                    first_line=map_chr(fnames,read_lines,n_max=1),
+                    second_line=map_chr(fnames,read_lines,skip=1,n_max=1))
 ```
 
 <table>
@@ -197,7 +197,7 @@ second\_line
 
 <td style="text-align:left;">
 
-data\_many/wrong\_header\_01.csv
+wrong\_header\_01.csv
 
 </td>
 
@@ -219,7 +219,7 @@ danno1;2001-05-22;1,73;75,4
 
 <td style="text-align:left;">
 
-data\_many/wrong\_header\_02.csv
+wrong\_header\_02.csv
 
 </td>
 
@@ -241,7 +241,7 @@ danno2;2001-05-22;1,73;75,4
 
 <td style="text-align:left;">
 
-data\_many/wrong\_header\_03.csv
+wrong\_header\_03.csv
 
 </td>
 
@@ -286,297 +286,17 @@ repair_and_read <- function(fname,fixed_header) {
 df_combo <- fnames %>% map_dfr(repair_and_read,fixed_header)
 ```
 
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-name
-
-</th>
-
-<th style="text-align:left;">
-
-birthdate
-
-</th>
-
-<th style="text-align:right;">
-
-height
-
-</th>
-
-<th style="text-align:right;">
-
-kgs
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-danno1
-
-</td>
-
-<td style="text-align:left;">
-
-2001-05-22
-
-</td>
-
-<td style="text-align:right;">
-
-1.73
-
-</td>
-
-<td style="text-align:right;">
-
-75.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-manno1
-
-</td>
-
-<td style="text-align:left;">
-
-2002-06-23
-
-</td>
-
-<td style="text-align:right;">
-
-1.83
-
-</td>
-
-<td style="text-align:right;">
-
-85.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-weirdo1
-
-</td>
-
-<td style="text-align:left;">
-
-2003-07-24
-
-</td>
-
-<td style="text-align:right;">
-
-1.93
-
-</td>
-
-<td style="text-align:right;">
-
-91.3
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-danno2
-
-</td>
-
-<td style="text-align:left;">
-
-2001-05-22
-
-</td>
-
-<td style="text-align:right;">
-
-1.73
-
-</td>
-
-<td style="text-align:right;">
-
-75.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-manno2
-
-</td>
-
-<td style="text-align:left;">
-
-2002-06-23
-
-</td>
-
-<td style="text-align:right;">
-
-1.83
-
-</td>
-
-<td style="text-align:right;">
-
-85.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-weirdo2
-
-</td>
-
-<td style="text-align:left;">
-
-2003-07-24
-
-</td>
-
-<td style="text-align:right;">
-
-1.93
-
-</td>
-
-<td style="text-align:right;">
-
-91.3
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-danno3
-
-</td>
-
-<td style="text-align:left;">
-
-2001-05-22
-
-</td>
-
-<td style="text-align:right;">
-
-1.73
-
-</td>
-
-<td style="text-align:right;">
-
-75.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-manno3
-
-</td>
-
-<td style="text-align:left;">
-
-2002-06-23
-
-</td>
-
-<td style="text-align:right;">
-
-1.83
-
-</td>
-
-<td style="text-align:right;">
-
-85.4
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-weirdo3
-
-</td>
-
-<td style="text-align:left;">
-
-2003-07-24
-
-</td>
-
-<td style="text-align:right;">
-
-1.93
-
-</td>
-
-<td style="text-align:right;">
-
-91.3
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
+| name    | birthdate  | height |  kgs |
+| :------ | :--------- | -----: | ---: |
+| danno1  | 2001-05-22 |   1.73 | 75.4 |
+| manno1  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo1 | 2003-07-24 |   1.93 | 91.3 |
+| danno2  | 2001-05-22 |   1.73 | 75.4 |
+| manno2  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo2 | 2003-07-24 |   1.93 | 91.3 |
+| danno3  | 2001-05-22 |   1.73 | 75.4 |
+| manno3  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo3 | 2003-07-24 |   1.93 | 91.3 |
 
 -----
 
