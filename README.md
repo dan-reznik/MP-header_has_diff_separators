@@ -140,6 +140,69 @@ df_sensei4
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
+# When several files have the same defective header
+
+In the directory “data\_many” I placed 3 slightly modified copies of the
+original file with the problematic header:
+
+``` r
+fnames <- fs::dir_ls("data_many")
+fnames
+#> data_many/wrong_header_01.csv data_many/wrong_header_02.csv 
+#> data_many/wrong_header_03.csv
+```
+
+Let’s build a table showing in each line the name of the file, the first
+line, and the 2nd line:
+
+``` r
+tibble(fname=fnames,
+       first_line=map_chr(fname,read_lines,n_max=1),
+       second_line=map_chr(fname,read_lines,skip=1,n_max=1)) %>%
+  knitr::kable()
+```
+
+| fname                            | first\_line               | second\_line                |
+| :------------------------------- | :------------------------ | :-------------------------- |
+| data\_many/wrong\_header\_01.csv | name|birthdate|height|kgs | danno1;2001-05-22;1,73;75,4 |
+| data\_many/wrong\_header\_02.csv | name|birthdate|height|kgs | danno2;2001-05-22;1,73;75,4 |
+| data\_many/wrong\_header\_03.csv | name|birthdate|height|kgs | danno3;2001-05-22;1,73;75,4 |
+
+As before let us fix the separators in the header for the first file in
+the series
+
+``` r
+fixed_header <- read_lines(fnames[1],n_max=1) %>%
+  str_replace_all(fixed("|"),";")
+fixed_header
+#> [1] "name;birthdate;height;kgs"
+```
+
+Now let’s read all files with the fixed header and concatenate them in a
+single data frame:
+
+``` r
+repair_and_read <- function(fname,fixed_header) {
+  c(fixed_header,read_lines(fname,skip=1)) %>%
+  str_c(collapse="\n") %>%
+    read_csv2
+}
+
+df_combo <- fnames %>% map_dfr(repair_and_read,fixed_header)
+```
+
+| name    | birthdate  | height |  kgs |
+| :------ | :--------- | -----: | ---: |
+| danno1  | 2001-05-22 |   1.73 | 75.4 |
+| manno1  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo1 | 2003-07-24 |   1.93 | 91.3 |
+| danno2  | 2001-05-22 |   1.73 | 75.4 |
+| manno2  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo2 | 2003-07-24 |   1.93 | 91.3 |
+| danno3  | 2001-05-22 |   1.73 | 75.4 |
+| manno3  | 2002-06-23 |   1.83 | 85.4 |
+| weirdo3 | 2003-07-24 |   1.93 | 91.3 |
+
 -----
 
 Never give up. Every frustration is a necessary step in the path toward

@@ -138,6 +138,49 @@ df_sensei4 %>%
   knitr::kable()
 ```
 
+# When several files have the same defective header
+
+In the directory "data_many" I placed 3 slightly modified copies of the original file with the problematic header:
+
+```{r}
+fnames <- fs::dir_ls("data_many")
+fnames
+```
+
+Let's build a table showing in each line the name of the file, the first line, and the 2nd line:
+
+```{r}
+tibble(fname=fnames,
+       first_line=map_chr(fname,read_lines,n_max=1),
+       second_line=map_chr(fname,read_lines,skip=1,n_max=1)) %>%
+  knitr::kable()
+```
+
+As before let us fix the separators in the header for the first file in the series
+
+```{r}
+fixed_header <- read_lines(fnames[1],n_max=1) %>%
+  str_replace_all(fixed("|"),";")
+fixed_header
+```
+
+Now let's read all files with the fixed header and concatenate them in a single data frame:
+
+```{r,message=F,results=F}
+repair_and_read <- function(fname,fixed_header) {
+  c(fixed_header,read_lines(fname,skip=1)) %>%
+  str_c(collapse="\n") %>%
+    read_csv2
+}
+
+df_combo <- fnames %>% map_dfr(repair_and_read,fixed_header)
+```
+
+```{r,echo=F}
+df_combo %>%
+  knitr::kable()
+```
+
 ***
 
 Never give up. Every frustration is a necessary step in the path toward mastery.
