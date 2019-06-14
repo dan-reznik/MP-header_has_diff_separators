@@ -53,7 +53,9 @@ fixed_header <- read_lines(fname1,n_max=1) %>%
 fixed_header
 ```
 
-# Solution 1: concatenate fixed header and body
+# Defective header in single file
+
+## Solution 1: concatenate fixed header and body
 
 Concatenate fixed header with body of file (without the original header) and pipe result to read_csv2
 
@@ -70,7 +72,7 @@ df_sensei1 %>%
   knitr::kable()
 ```
 
-# Solution 2: replace wrong separators on first line in entire file
+## Solution 2: replace wrong separators on first line in entire file
 
 warning: make sure file does not contain any other "|" 
 
@@ -86,7 +88,7 @@ df_sensei2 %>%
   knitr::kable()
 ```
 
-# Solution 3: combine fixed header with original file, skipping header chars
+## Solution 3: combine fixed header with original file, skipping header chars
 
 If we skip the body of the file by the length of the fixed_header + 1 (for the new line) we get the entire file after the first line:
 
@@ -113,7 +115,7 @@ df_sensei3 %>%
   knitr::kable()
 ```
 
-# Solution 4: low-level "seek" to skip+1
+## Solution 4: low-level "seek" to skip+1
 
 Most efficient as skipping is done on disk using `seek()`. For black-belts only! Note: may not work on Windows.
 
@@ -138,7 +140,7 @@ df_sensei4 %>%
   knitr::kable()
 ```
 
-# When several files have the same defective header
+# Several files have the same defective header
 
 In the directory "data_many" I placed 3 slightly modified copies of the original file with the problematic header:
 

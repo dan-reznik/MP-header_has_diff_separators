@@ -46,7 +46,9 @@ fixed_header
 #> [1] "name;birthdate;height;kgs"
 ```
 
-# Solution 1: concatenate fixed header and body
+# Defective header in single file
+
+## Solution 1: concatenate fixed header and body
 
 Concatenate fixed header with body of file (without the original header)
 and pipe result to read\_csv2
@@ -65,7 +67,7 @@ df_sensei1
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution 2: replace wrong separators on first line in entire file
+## Solution 2: replace wrong separators on first line in entire file
 
 warning: make sure file does not contain any other “|”
 
@@ -82,7 +84,7 @@ df_sensei2
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution 3: combine fixed header with original file, skipping header chars
+## Solution 3: combine fixed header with original file, skipping header chars
 
 If we skip the body of the file by the length of the fixed\_header + 1
 (for the new line) we get the entire file after the first line:
@@ -112,7 +114,7 @@ df_sensei3
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# Solution 4: low-level “seek” to skip+1
+## Solution 4: low-level “seek” to skip+1
 
 Most efficient as skipping is done on disk using `seek()`. For
 black-belts only\! Note: may not work on Windows.
@@ -140,7 +142,7 @@ df_sensei4
 | manno  | 2002-06-23 |   1.83 | 85.4 |
 | weirdo | 2003-07-24 |   1.93 | 91.3 |
 
-# When several files have the same defective header
+# Several files have the same defective header
 
 In the directory “data\_many” I placed 3 slightly modified copies of the
 original file with the problematic header:
